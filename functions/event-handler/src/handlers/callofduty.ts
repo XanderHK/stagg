@@ -37,12 +37,6 @@ export namespace WZ {
         export class Created implements EventHandler {
             public readonly eventType:string = Events.CallOfDuty.WZ.Match.Created.Type
             public async callback({ payload: { account, match } }:EventInput<Events.CallOfDuty.WZ.Match.Payload>):Promise<void> {
-                console.log('[+] Assign Discord rank role')
-                const rankDays = Number(config.discord.roles.ranking.limit?.toLowerCase()?.replace('d', ''))
-                const rankedTimeLimitSec = new Date(Date.now() - rankDays * 24 * 60 * 60 * 1000).getTime() / 1000
-                if (match.end_time >= rankedTimeLimitSec) {
-                    http.get(`${config.network.host.faas.etl.discord.role}?discord_id=${account.discord_id}&limit=${config.discord.roles.ranking.limit}`)
-                }
                 // console.log('[+] Message report to user for match')
                 // Events.CallOfDuty.WZ.Rank.Up.Trigger({ account, oldRank: 0, newRank: 0 })
             }

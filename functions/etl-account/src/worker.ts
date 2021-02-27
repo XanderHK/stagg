@@ -52,10 +52,18 @@ export class Worker {
             if (this.ShouldSpawnSibling()) {
                 await this.SpawnSiblingInstance()
                 this.hardStopReached = true
-                return
+                break
             }
             await this.RefreshMatchHistory()
         }
+        this.TriggerRankUpdate()
+    }
+    private async TriggerRankUpdate() {
+        console.log('[%] Triggering Discord Rank Role Update...')
+        return axios.get(
+            `${config.network.host.faas.etl.discord.role}?discord_id=${this.account.discord_id}`,
+            { headers: { 'x-network-key': config.network.key } }
+        )
     }
     private async SpawnSiblingInstance() {
         const siblingUrl = `${config.network.host.faas.etl.account}?redundancy=true`+
