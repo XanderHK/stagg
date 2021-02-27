@@ -8,13 +8,14 @@ import {
 } from '.'
 
 export interface Config {
+    network: Config.Network
+    jwt: { secret: string }
     membership: {
         price: {
             year: number
             month: number
         }
     }
-    jwt: { secret: string }
     postgres: {
         db: string
         user: string
@@ -76,9 +77,16 @@ export interface Config {
             }
         }
     }
-    network: {
+}
+export namespace Config {
+    export interface Network {
         key: string
-        host: {
+        host: Config.Network.Host
+        port: Config.Network.Port
+        timing: Config.Network.Timing
+    }
+    export namespace Network {
+        export interface Host {
             web: string
             api: string
             faas: {
@@ -104,7 +112,7 @@ export interface Config {
                 }
             }
         }
-        port: {
+        export interface Port {
             web: number
             api: number
             faas: {
@@ -119,7 +127,7 @@ export interface Config {
                 render: { html: number, chart: number }
             }
         }
-        timing: {
+        export interface Timing {
             faas: {
                 etl: {
                     account: {
