@@ -36,9 +36,35 @@ export class HTTP {
 }
 
 export namespace FaaS {
-    
+    export namespace Bot {
+        export const Message = async () => {}
+    }
+    export namespace ETL {
+        export const Account = async () => {}
+        export const Cheaters = async () => {}
+        export namespace Discord {
+            export const Role = async () => {}
+        }
+    }
+    export namespace Render {
+        export const HTML = async () => {}
+        export const Chart = async () => {}
+    }
 }
 
-export class API {
-
+export namespace API {
+    export const Health = async () => {}
+    export namespace Discord {
+        export const Authorize = async () => {}
+    }
+    export namespace CallOfDuty {
+        export const Authorize = async () => {}
+        export namespace WZ {
+            export const Account = async () => {}
+            export namespace Match {
+                export const Summary = async () => {}
+                export const History = async () => {}
+            }
+        }
+    }
 }
