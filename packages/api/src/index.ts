@@ -12,8 +12,8 @@ export const setNetworkConfig = (network:Config.Network) => {
     Events.setNetworkConfig(config.network)
 }
 
-type Res<Response> = Promise<{ data: Response, headers: any }>
-type HeaderRes<Response,Headers> = Promise<{ data: Response, headers: Headers }>
+type Res<Response> = Promise<{ data: Response, status:number, headers:any }>
+type HeaderRes<Response,Headers> = Promise<{ data: Response, status:number, headers: Headers }>
 export class http {
     private static async request(options:AxiosRequestConfig) {
         console.log(`[>] HTTP.${options?.method?.toUpperCase()}: ${options?.url}`)
@@ -31,9 +31,9 @@ export class http {
     }
     private static async requestNet(options:AxiosRequestConfig) {
         console.log(`[>] GCP.HTTP.${options?.method?.toUpperCase()}: ${options?.url}`)
-        return axios({
+        return http.request({
             ...options,
-            headers: { 'x-network-key': config.network.key, ...options?.headers }
+            headers: { 'x-network-key': config.network.key, ...(options?.headers||{}) }
         })
     }
     public static async get(url:string, options:Partial<AxiosRequestConfig>={}) {
@@ -102,11 +102,11 @@ export namespace FaaS {
         ):Res<{ success: Boolean }> => http.getNet(
             config.network.host.faas.etl.account + 
             '?account_id=' + account_id +
-            endTimes?.mw ? `&mw_end=${endTimes.mw}` : '' +
-            endTimes?.cw ? `&cw_end=${endTimes.cw}` : '' +
-            endTimes?.wz ? `&wz_end=${endTimes.wz}` : '' +
-            options?.redundancy ? '&redundancy=true' : '' +
-            options?.fresh ? '&fresh=true' : ''
+            (endTimes?.mw ? `&mw_end=${endTimes.mw}` : '') +
+            (endTimes?.cw ? `&cw_end=${endTimes.cw}` : '') +
+            (endTimes?.wz ? `&wz_end=${endTimes.wz}` : '') +
+            (options?.redundancy ? '&redundancy=true' : '') +
+            (options?.fresh ? '&fresh=true' : '')
         )
         export const Cheaters = async (
             match_id:string
@@ -188,7 +188,7 @@ export namespace API {
                 platform:Model.CallOfDuty.Platform='uno'
             ):Res<Route.CallOfDuty.Account> => http.get(
                 config.network.host.api +
-                '/callofduty/' + platform +
+                '/callofduty/' + platform + '/' +
                 Model.CallOfDuty.format.username.url.encoded(username)
             )
             export namespace Match {
@@ -198,7 +198,7 @@ export namespace API {
                     filters:Model.CallOfDuty.Match.Filters={}
                 ):Res<Route.CallOfDuty.Account.WZ> => http.get(
                     config.network.host.api +
-                    '/callofduty/' + platform +
+                    '/callofduty/' + platform + '/' +
                     Model.CallOfDuty.format.username.url.encoded(username) +
                     '/wz' + '?' + Model.CallOfDuty.format.filters.objToUrl(filters)
                 )
@@ -208,7 +208,7 @@ export namespace API {
                     filters:Model.CallOfDuty.Match.Filters={}
                 ):Res<Route.CallOfDuty.Account.WZ.Matches> => http.get(
                     config.network.host.api +
-                    '/callofduty/' + platform +
+                    '/callofduty/' + platform + '/' +
                     Model.CallOfDuty.format.username.url.encoded(username) +
                     '/wz/matches' + '?' + Model.CallOfDuty.format.filters.objToUrl(filters)
                 )

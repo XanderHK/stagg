@@ -24,6 +24,20 @@
                     "redirect": "http://localhost:8080/discord/oauth"
                 }
             }
+        },
+        "timing": {
+            "faas": {
+                "etl": {
+                    "account": {
+                        "timeout": 120,
+                        "respawn": 90,
+                        "interval": {
+                            "premium": 10,
+                            "standard": 30
+                        }
+                    }
+                }
+            }
         }
     },
     "discord": {

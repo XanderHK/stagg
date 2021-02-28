@@ -24,7 +24,7 @@ Page.getInitialProps = async ({ store, res, req, query }:NextPageContext) => {
     const limit = query.limit as string
     const skip = query.skip as string
     const unoUsername = query.playerIdentifier as string
-    const reportProps = await Reports.Barracks.WZ.PropsLoader({ accountIdentifier: { uno: Model.Account.format.username.raw(unoUsername) } }, limit, skip)
+    const reportProps = await Reports.Barracks.WZ.PropsLoader({ accountIdentifier: { uno: Model.CallOfDuty.format.username.raw(unoUsername) } }, limit, skip)
     return { reportProps }
 }
 
