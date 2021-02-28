@@ -11,57 +11,71 @@ export const setNetworkConfig = (network:Config.Network) => Object.keys(network)
 type Res<Response> = Promise<{ data: Response, headers: any }>
 type HeaderRes<Response,Headers> = Promise<{ data: Response, headers: Headers }>
 export class http {
-    private static network_key:string
     private static async request(options:AxiosRequestConfig) {
         console.log(`[>] HTTP.${options?.method?.toUpperCase()}: ${options?.url}`)
-        return axios(options)
+        try {
+            const { data, status, headers } = await axios(options)
+            return { data, status, headers }
+        } catch(e) {
+            try {
+                const { data, status, headers } = e.response
+                return { data, status, headers }
+            } catch(e) {
+                return { data: null, status: 502, headers: {} }
+            }
+        }
     }
     private static async requestNet(options:AxiosRequestConfig) {
-        if (!this.network_key) this.network_key = await getEnvSecret('NETWORK_KEY')
         console.log(`[>] GCP.HTTP.${options?.method?.toUpperCase()}: ${options?.url}`)
         return axios({
             ...options,
-            headers: { 'x-network-key': this.network_key }
+            headers: { 'x-network-key': config.network.key, ...options?.headers }
         })
     }
-    public static async get(url:string) {
+    public static async get(url:string, options:Partial<AxiosRequestConfig>={}) {
         return this.request({
             url,
             method: 'GET',
+            ...options,
         })
     }
-    public static async put(url:string, data?:any) {
+    public static async put(url:string, data?:any, options:Partial<AxiosRequestConfig>={}) {
         return this.request({
             url,
             data,
             method: 'PUT',
+            ...options,
         })
     }
-    public static async post(url:string, data?:any) {
+    public static async post(url:string, data?:any, options:Partial<AxiosRequestConfig>={}) {
         return this.request({
             url,
             data,
             method: 'POST',
+            ...options,
         })
     }
-    public static async getNet(url:string) {
+    public static async getNet(url:string, options:Partial<AxiosRequestConfig>={}) {
         return this.requestNet({
             url,
             method: 'GET',
+            ...options,
         })
     }
-    public static async putNet(url:string, data?:any) {
+    public static async putNet(url:string, data?:any, options:Partial<AxiosRequestConfig>={}) {
         return this.requestNet({
             url,
             data,
             method: 'PUT',
+            ...options,
         })
     }
-    public static async postNet(url:string, data?:any) {
+    public static async postNet(url:string, data?:any, options:Partial<AxiosRequestConfig>={}) {
         return this.requestNet({
             url,
             data,
             method: 'POST',
+            ...options,
         })
     }
 }
@@ -79,16 +93,16 @@ export namespace FaaS {
     export namespace ETL {
         export const Account = async (
             account_id:string,
-            options:{ fresh?:Boolean, redundancy?:Boolean },
-            endTimes:{ mw?:number, cw?:number, wz?:number }
+            options:{ fresh?:Boolean, redundancy?:Boolean }={},
+            endTimes:{ mw?:number, cw?:number, wz?:number }={}
         ):Res<{ success: Boolean }> => http.getNet(
             config.network.host.faas.etl.account + 
             '?account_id=' + account_id +
-            endTimes.mw ? `&mw_end=${endTimes.mw}` : '' +
-            endTimes.cw ? `&cw_end=${endTimes.cw}` : '' +
-            endTimes.wz ? `&wz_end=${endTimes.wz}` : '' +
-            options.redundancy ? '&redundancy=true' : '' +
-            options.fresh ? '&fresh=true' : ''
+            endTimes?.mw ? `&mw_end=${endTimes.mw}` : '' +
+            endTimes?.cw ? `&cw_end=${endTimes.cw}` : '' +
+            endTimes?.wz ? `&wz_end=${endTimes.wz}` : '' +
+            options?.redundancy ? '&redundancy=true' : '' +
+            options?.fresh ? '&fresh=true' : ''
         )
         export const Cheaters = async (
             match_id:string
@@ -150,6 +164,11 @@ export namespace FaaS {
 export namespace API {
     export const Health = async ():Res<Route.Health> =>
         http.get(config.network.host.api + '/health')
+    export namespace Account {
+        export const Register = async (discordJwt:string, callofdutyJwt:string):
+            HeaderRes<Route.Account.Registration, Route.Headers.Auth.Account> =>
+                http.post(config.network.host.api + '/account/register', {}, { headers: { 'x-discord-provision-jwt': discordJwt, 'x-callofduty-provision-jwt': callofdutyJwt } })
+    }
     export namespace Discord {
         export const Authorize = async (oauthCode:string):
             HeaderRes<Route.Discord.OAuthExchange, Route.Headers.Auth.Provision.Discord | Route.Headers.Auth.Account> =>

@@ -1,3 +1,4 @@
+import { Model, FaaS } from '@stagg/api'
 import { config } from 'src/config'
 import { MessageHandler, format } from '../handlers/message'
 import { Feature } from '.'
@@ -10,11 +11,13 @@ export class BarracksWZ implements Feature {
     }
     public async onMessage(handler:MessageHandler):Promise<void> {
         const params = this.getParams(handler.chain)
-        const span = { limit: null, skip: null }
+        const filters = <Model.CallOfDuty.Match.Filters>{ limit: null, skip: null }
         for(const i in params) {
             const param = params[i].trim()
             if (param.match(/^[0-9]{1,3}(d|m)?$/i)) {
-                span[span.limit === null ? 'limit' : 'skip'] = param
+                const uom = <Model.CallOfDuty.Match.Filters.UOM>param.replace(/[0-9]/g, '')
+                const count = Number(param.replace(/[^0-9]/g, ''))
+                filters[filters.limit === null ? 'limit' : 'skip'] = { uom, count }
                 delete params[i]
             }
             if (param === 'me') {
@@ -25,21 +28,15 @@ export class BarracksWZ implements Feature {
         if (!unoUsernames.length) {
             unoUsernames.push(handler.authorAccount.callofduty_uno_username)
         }
-        const spanParams = []
-        if (span.limit !== null) {
-            spanParams.push(`limit=${span.limit}`)
-        }
-        if (span.skip !== null) {
-            spanParams.push(`skip=${span.skip}`)
-        }
         for(const uname of unoUsernames) {
-            const playerUrl = `/${uname.replace('#', '@')}`
-            const profileLinkUrl = config.network.host.web + playerUrl + `?${spanParams.join('&')}`
-            const renderHtmlUrl = `${config.network.host.faas.render.html}?url=${playerUrl}&${spanParams.join('&')}`
-            const renderHtmlUrlFinal =  `${renderHtmlUrl}&width=1000&f=/${uname.replace('#', '_')}.wz.barracks.jpg`
-            const unameCmd = `% wz ${uname}${span.limit ? ` ${span.limit}` : ''}${span.skip ? ` ${span.skip}` : ''}`
-            console.log('[>] Discord bot dispatching image from', renderHtmlUrlFinal)
-            handler.reply({ content: format(['```', '', unameCmd, '', '```'+profileLinkUrl]), files: [renderHtmlUrlFinal] })
+            const renderHtmlFaasUrl = FaaS.Render.HTML.WZ.Match.Summary(uname, filters)
+            const cmdWithUsername = `% wz ${uname} ${ Model.CallOfDuty.format.filters.objToCmd(filters) }`
+            const usernameUrl = Model.CallOfDuty.format.username.url.display(uname)
+            const filtersQuery = Model.CallOfDuty.format.filters.objToUrl(filters)
+            const filterUrlParam = !filtersQuery ? '' : '?' + filtersQuery
+            const profileLinkUrl = config.network.host.web + '/' + usernameUrl + filterUrlParam
+            console.log('[>] Discord bot dispatching image from', renderHtmlFaasUrl)
+            handler.reply({ content: format(['```', '', cmdWithUsername, '', '```'+profileLinkUrl]), files: [renderHtmlFaasUrl] })
         }
     }
 }

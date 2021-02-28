@@ -1,7 +1,8 @@
 import ordinal from 'ordinal'
+import { Model } from '@stagg/api'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { request } from 'src/api-service'
+import { api } from 'src/api-service'
 import {
     commaNum,
     commaToFixed,
@@ -72,9 +73,8 @@ export const PropsLoader = async ({ accountIdentifier }:ReportLazyLoadProps, lim
     if (!accountIdentifier.uno) {
         throw 'uno username required'
     }
-    const apiUrlBase = `/callofduty/uno/${encodeURIComponent(accountIdentifier.uno)}/wz`
-    const apiUrlFilters = `?limit=${limit}&skip=${skip}&modesExcluded=dmz`
-    const { data } = await request<any>(apiUrlBase + apiUrlFilters)
+    const filters = Model.CallOfDuty.format.filters.urlToObj({ limit, skip, modesExcluded: 'dmz' })
+    const { data } = await api.CallOfDuty.WZ.Match.Summary(accountIdentifier.uno, 'uno', filters)
     if (!data.account) {
         return null
     }

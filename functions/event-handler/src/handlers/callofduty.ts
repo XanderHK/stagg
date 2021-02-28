@@ -1,6 +1,9 @@
 import * as Events from '@stagg/events'
+import { setNetworkConfig, FaaS } from '@stagg/api'
 import { EventInput, EventHandler, http } from '.'
 import { config } from '../config'
+
+setNetworkConfig(config.network)
 
 export namespace WZ {
     export namespace Rank {
@@ -45,7 +48,7 @@ export namespace WZ {
             public readonly eventType:string = Events.CallOfDuty.WZ.Match.Discovered.Type
             public async callback({ payload: { account, match } }:EventInput<Events.CallOfDuty.WZ.Match.Payload>):Promise<void> {
                 console.log('[+] Check cheaters for match', match.match_id)
-                http.get(`${config.network.host.faas.etl.cheaters}?match_id=${match.match_id}`)
+                FaaS.ETL.Cheaters(match.match_id)
             }
         }
     }

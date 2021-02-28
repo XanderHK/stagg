@@ -1,4 +1,5 @@
 import * as CallOfDuty from '@callofduty/types'
+import { Model } from '..'
 
 interface GenericProfile {
     updated: Date
@@ -40,7 +41,7 @@ interface GenericProfile {
 export type Platform = CallOfDuty.Platform | 'discord' | 'account' | 'id'
 export namespace format {
     export namespace filters {
-        export const urlToObj = (q:{[key:string]:string}) => {
+        export const urlToObj = (q:{[key:string]:string}):Model.CallOfDuty.Match.Filters => {
             const filters = {}
             for(const key in q) {
                 if (!q[key]) continue
@@ -59,8 +60,9 @@ export namespace format {
                         filters[key] = Number(q[key])
                 }
             }
+            return filters
         }
-        export const objToUrl = (f:Match.Filters) => {
+        export const objToUrl = (f:Match.Filters):string => {
             const queries = []
             for(const key in f) {
                 if (!f[key]) continue
@@ -79,7 +81,7 @@ export namespace format {
             }
             return queries.join('&')
         }
-        export const objToCmd = (f:Match.Filters) => {
+        export const objToCmd = (f:Match.Filters):string => {
             const filters = []
             for(const key in f) {
                 if (!f[key]) continue

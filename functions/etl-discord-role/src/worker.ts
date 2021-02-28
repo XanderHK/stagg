@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { API, Model } from '@stagg/api'
 import * as Discord from 'discord.js'
 import { config } from './config'
 
@@ -72,10 +72,8 @@ async function persistRoles(guild:Discord.Guild) {
 }
 
 async function assignRole(member:Discord.GuildMember, guild:Discord.Guild, limit:string='7d', skip:string='') {
-    const queries = ['modesExcluded=dmz', limit ? `limit=${limit}` : null, skip ? `skip=${skip}` : null]
-    const apiUrl = `${config.network.host.api}/callofduty/discord/${member.user.id}/wz?${queries.filter(q => q).join('&')}`
-    console.log('[>] Requesting API:', apiUrl)
-    const { data: { rank } } = await axios.get(apiUrl)
+    const filters = Model.CallOfDuty.format.filters.urlToObj({ limit, skip, modesExcluded: 'dmz' })
+    const { data: { rank } } = await API.CallOfDuty.WZ.Match.Summary(member.user.id, 'discord', filters)
     console.log('[.] Received rank from API:', rank)
     const guildRoles = guild.roles.cache.array()
     const allTierRoles = guildRoles.filter(({ name }) => config.callofduty.wz.ranking.tiers.find(tier => name.includes(tier)))

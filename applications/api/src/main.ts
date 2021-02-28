@@ -3,12 +3,14 @@ import * as bodyParser from 'body-parser'
 import { ValidationPipe } from '@nestjs/common'
 import { RootModule } from './module'
 import { useConfig } from '@stagg/gcp'
+import { setNetworkConfig } from '@stagg/api'
 import { config } from './config'
 import { dbConnect } from './db'
 
 async function bootstrap() {
   await useConfig(config)
   await dbConnect()
+  setNetworkConfig(config.network)
   console.log(
       `${'\x1b[32m' /* green */}${'\x1b[1m' /* bright/bold */}`+
       `----------------------------------------------------------\n`+

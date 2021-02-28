@@ -5,11 +5,10 @@
  * ie: CORRECT: <img src="http://example.com/image.png" />                       *
  *     INCORRECT: <img src="/image.png" />                                       *
  *********************************************************************************/
-import axios from 'axios'
-import { Template } from 'src/components/Template'
 import { NextPageContext } from 'next'
+import { api } from 'src/api-service'
+import { Template } from 'src/components/Template'
 import { MatchPreview } from 'src/components/Reports/Match/MatchPreview'
-import { config } from 'config/ui'
 
 const Page = ({ renderReport, results }) => {
     return (
@@ -27,9 +26,7 @@ Page.getInitialProps = async ({ store, res, req, query }:NextPageContext) => {
     const limit = query.limit as string
     const skip = query.skip as string
     const unoUsername = query.playerIdentifier as string
-    const apiUrl = `${config.network.host.api}/callofduty/uno/${unoUsername.replace('@', '%23')}/wz/matches?limit=10m`
-    console.log(apiUrl)
-    const { data: { results } } = await axios.get(apiUrl)
+    const { data: { results } } = await api.CallOfDuty.WZ.Match.History(unoUsername, 'uno', { limit: { count: 10 } })
     return { results }
 }
 

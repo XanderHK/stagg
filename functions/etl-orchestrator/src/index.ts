@@ -1,5 +1,5 @@
-import Axios from 'axios'
 import { useConfig } from '@stagg/gcp'
+import { setNetworkConfig, FaaS } from '@stagg/api'
 import { createConnection } from 'typeorm'
 import { useConnection, config } from './config'
 import { Service } from './service'
@@ -15,12 +15,13 @@ const dbConnect = async () => {
 export default async (req, res) => {
     await useConfig(config)
     await dbConnect()
+    setNetworkConfig(config.network)
     console.log('[+] Connected, executing...')
     const service = new Service()
     const accounts = await service.getAccounts()
     for(const acct of accounts) {
         console.log('[+] Kicking off Account Data ETL for account_id', acct.account_id, '; last updated at', acct.updated_datetime)
-        Axios.get(`${config.network.host.faas.etl.account}?account_id=${acct.account_id}`, { headers: { 'x-network-key': config.network.key } })
+        FaaS.ETL.Account(acct.account_id)
     }
     res.status(200)
     res.send({ success: true })
