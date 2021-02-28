@@ -1,12 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { getEnvSecret, Config } from '@stagg/gcp'
+import { Config } from '@stagg/gcp'
+import * as Events from '@stagg/events'
 import * as Model from './models'
 import * as Route from './routes'
 
-export { Model, Route }
+export { Model, Route, Events }
 
 const config = <{ network: Config.Network }>{ network: {} }
-export const setNetworkConfig = (network:Config.Network) => Object.keys(network).forEach(k => config.network[k] = network[k])
+export const setNetworkConfig = (network:Config.Network) => {
+    Object.keys(network).forEach(k => config.network[k] = network[k])
+    Events.setNetworkConfig(config.network)
+}
 
 type Res<Response> = Promise<{ data: Response, headers: any }>
 type HeaderRes<Response,Headers> = Promise<{ data: Response, headers: Headers }>

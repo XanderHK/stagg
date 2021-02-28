@@ -1,7 +1,6 @@
 import { validateNetworkAuth, useConfig } from '@stagg/gcp'
 import { createConnection } from 'typeorm'
-import { setNetworkConfig } from '@stagg/api'
-import * as Events from '@stagg/events'
+import { setNetworkConfig, Events } from '@stagg/api'
 import { useConnection, config } from './config'
 import { DbService } from './service'
 import { Worker } from './worker'

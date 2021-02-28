@@ -1,5 +1,4 @@
-import * as Events from '@stagg/events'
-import { Route } from '@stagg/api'
+import { Route, Events } from '@stagg/api'
 import {
     Req,
     Res,

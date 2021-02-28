@@ -1,9 +1,7 @@
-import * as Events from '@stagg/events'
 import { EventInput, EventHandler } from '.'
-import { setNetworkConfig, FaaS, Model } from '@stagg/api'
+import { FaaS, Model, Events } from '@stagg/api'
 import { config } from '../config'
 
-setNetworkConfig(config.network)
 
 export class Created implements EventHandler {
     public readonly eventType:string = Events.Account.Created.Type

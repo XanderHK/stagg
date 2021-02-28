@@ -1,9 +1,5 @@
-import * as Events from '@stagg/events'
-import { setNetworkConfig, FaaS } from '@stagg/api'
+import { FaaS, Events } from '@stagg/api'
 import { EventInput, EventHandler } from '.'
-import { config } from '../config'
-
-setNetworkConfig(config.network)
 
 export namespace WZ {
     export namespace Rank {

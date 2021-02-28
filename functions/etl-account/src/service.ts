@@ -1,5 +1,5 @@
 import * as DB from '@stagg/db'
-import * as Events from '@stagg/events'
+import { Events } from '@stagg/api'
 import { getCustomRepository, In } from 'typeorm'
 import * as CallOfDuty from '@callofduty/types'
 import {

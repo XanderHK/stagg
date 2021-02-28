@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as DB from '@stagg/db'
-import { getEnvSecret } from '@stagg/gcp'
+import { Config } from '@stagg/gcp'
 
 export interface EventInput {
     type: string
@@ -10,18 +10,14 @@ export interface EventPayload {
     account?: DB.Account.Entity
 }
 
+const config = <Config>{ network: {} }
+export const setNetworkConfig = (network:Config.Network) => Object.keys(network).forEach(k => config.network[k] = network[k])
 
-let networkKey = ''
-let eventHandlerUrl = 'https://us-east1-staggco.cloudfunctions.net/event-handler'
-const setNetworkKey = async () => {
-    networkKey = await getEnvSecret('NETWORK_KEY')
-}
 const dispatchEvent = async (type:string, payload:any) => {
-    if (!networkKey) await setNetworkKey()
-    console.log('[^]', eventHandlerUrl, type)
-    axios.post(eventHandlerUrl, { type, payload }, { headers: { 'x-network-key': networkKey } }).catch(() => {})
+    if (!config.network.key) throw new Error('Cannot dispatch Stagg Event without Network Key')
+    console.log('[^]', config.network.host.faas.event.handler, type)
+    axios.post(config.network.host.faas.event.handler, { type, payload }, { headers: { 'x-network-key': config.network.key } }).catch(() => {})
 }
-export const SetEventHandlerUrl = (url:string) => (eventHandlerUrl = url)
 
 export namespace Account {
     export interface Payload extends EventPayload {
