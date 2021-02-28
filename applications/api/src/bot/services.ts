@@ -43,7 +43,6 @@ export class BotService {
   constructor() {
     this.initFeatures()
     this.client = new Discord.Client()
-    console.log(`[?] Bot login...`)
     this.client.login(config.discord.client.token)
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('error', e => console.log('[!] Discord bot error:', e))
