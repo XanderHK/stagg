@@ -1,6 +1,6 @@
 import * as Events from '@stagg/events'
 import { setNetworkConfig, FaaS } from '@stagg/api'
-import { EventInput, EventHandler, http } from '.'
+import { EventInput, EventHandler } from '.'
 import { config } from '../config'
 
 setNetworkConfig(config.network)

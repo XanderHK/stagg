@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Dispatch } from 'redux'
 import * as StaggAPI from '@stagg/api'
 import { useDispatch } from 'react-redux'
@@ -10,33 +9,6 @@ export const api = StaggAPI.API
 
 export const apiService = (dispatch:Dispatch=useDispatch(), errorHandler:Function=()=>{}) => {
     return new API(dispatch, errorHandler)
-}
-
-export async function request<T>(
-    url:string,
-    method:'GET'|'POST'='GET',
-    payload?:object,
-    addHeaders?:{ [key:string]:string }
-):Promise<{ data: T, status: number, headers: object}> {
-    try {
-        const { data, status, headers } = await axios({
-            url,
-            method,
-            data: payload,
-            baseURL: config.network.host.api,
-            headers: {
-                ...addHeaders
-            },
-        })
-        return { data, status, headers }
-    } catch(e) {
-        try {
-            const { data, status, headers } = e.response
-            return { data, status, headers }
-        } catch(e) {
-            return { data: null, status: 502, headers: {} }
-        }
-    }
 }
 
 class API {
@@ -78,32 +50,6 @@ class API {
         }
         this.errorHandler(JSON.stringify(data))
         return false
-    }
-    protected async request<T>(
-        url:string,
-        method:'GET'|'POST'='GET',
-        payload?:object,
-        addHeaders?:{ [key:string]:string }
-    ):Promise<{ data: T, status: number, headers: object}> {
-        try {
-            const { data, status, headers } = await axios({
-                url,
-                method,
-                data: payload,
-                baseURL: config.network.host.api,
-                headers: {
-                    ...addHeaders
-                },
-            })
-            return { data, status, headers }
-        } catch(e) {
-            try {
-                const { data, status, headers } = e.response
-                return { data, status, headers }
-            } catch(e) {
-                return { data: null, status: 502, headers: {} }
-            }
-        }
     }
 }
 

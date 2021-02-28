@@ -26,7 +26,6 @@
     "@callofduty/api": "^1.2.5",
     "@callofduty/assets": "^1.2.5",
     "@nestjs/common": "^7.0.0",
-    "@nestjs/config": "^0.5.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/typeorm": "^7.1.4",
