@@ -18,10 +18,6 @@ export class DiscordController {
         private readonly acctService: AccountService,
         private readonly discordService: DiscordService,
     ) {}
-    @Get('/health')
-    async HealthCheck():Promise<string> {
-        return 'ok'
-    }
     @Get('/oauth/exchange/:oauthCode')
     async OAuthExchange(@Res() res, @Param() { oauthCode }):Promise<Route.Discord.OAuthExchange> {
         const accessToken = await this.discordService.exchangeOAuthCodeForAccessToken(oauthCode)

@@ -5,7 +5,6 @@ import {
     PrimaryColumn,
     EntityRepository,
 } from 'typeorm'
-import * as CallOfDuty from '@callofduty/types'
 import { BaseEntity, BaseRepository } from '../../../abstract'
 
 @Entity({ name: 'callofduty/wz/suspects', database: 'stagg' })
@@ -29,9 +28,6 @@ class SuspectWZ extends BaseEntity {
 
     @Column('uuid', { nullable: true })
     reporter_account_id?: string
-
-    @Column('jsonb')
-    match_log: CallOfDuty.MW.Match.WZ
 }
 
 @EntityRepository(SuspectWZ)

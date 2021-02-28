@@ -1,4 +1,4 @@
-import { MW, PlatformId, Game } from '@callofduty/types'
+import { PlatformId, Game } from '@callofduty/types'
 
 export interface Account extends Account.Provision {
     id: string

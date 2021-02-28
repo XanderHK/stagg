@@ -2,7 +2,7 @@ import { MW } from '@callofduty/types'
 import { CallOfDuty } from '@stagg/db'
 import { Model } from '@stagg/api'
 
-export const denormalizeMwProfile = (entity:CallOfDuty.MW.Profile.Entity):Partial<Model.MW.Profile> => ({
+export const denormalizeMwProfile = (entity:CallOfDuty.MW.Profile.Entity):Partial<Model.CallOfDuty.MW.Profile> => ({
     updated: entity.updated_datetime,
     level: entity.stat_level,
     prestige: entity.stat_prestige,
@@ -39,8 +39,8 @@ export const denormalizeMwProfile = (entity:CallOfDuty.MW.Profile.Entity):Partia
     }
 })
 
-export const denormalizeMwModes = (entities:CallOfDuty.MW.Profile.Mode.Entity[]):Record<MW.Mode.MP, Model.MW.Profile.Mode> => {
-    const modeMap = <Record<MW.Mode.MP, Model.MW.Profile.Mode>>{}
+export const denormalizeMwModes = (entities:CallOfDuty.MW.Profile.Mode.Entity[]):Record<MW.Mode.MP, Model.CallOfDuty.MW.Profile.Mode> => {
+    const modeMap = <Record<MW.Mode.MP, Model.CallOfDuty.MW.Profile.Mode>>{}
     for(const entity of entities) {
         modeMap[entity.mode_id] = {
             modeId: entity.mode_id,
@@ -53,8 +53,8 @@ export const denormalizeMwModes = (entities:CallOfDuty.MW.Profile.Mode.Entity[])
     return modeMap
 }
 
-export const denormalizeMwWeapons = (entities:CallOfDuty.MW.Profile.Weapon.Entity[]):Record<MW.Weapon.Name, Model.MW.Profile.Weapon> => {
-    const weaponMap = <Record<MW.Weapon.Name, Model.MW.Profile.Weapon>>{}
+export const denormalizeMwWeapons = (entities:CallOfDuty.MW.Profile.Weapon.Entity[]):Record<MW.Weapon.Name, Model.CallOfDuty.MW.Profile.Weapon> => {
+    const weaponMap = <Record<MW.Weapon.Name, Model.CallOfDuty.MW.Profile.Weapon>>{}
     for(const entity of entities) {
         weaponMap[entity.weapon_id] = {
             weaponId: entity.weapon_id,
@@ -70,8 +70,8 @@ export const denormalizeMwWeapons = (entities:CallOfDuty.MW.Profile.Weapon.Entit
     return weaponMap
 }
 
-export const denormalizeMwEquipment = (entities:CallOfDuty.MW.Profile.Equipment.Entity[]):Record<string, Model.MW.Profile.Equipment> => {
-    const equipMap = <Record<string, Model.MW.Profile.Equipment>>{}
+export const denormalizeMwEquipment = (entities:CallOfDuty.MW.Profile.Equipment.Entity[]):Record<string, Model.CallOfDuty.MW.Profile.Equipment> => {
+    const equipMap = <Record<string, Model.CallOfDuty.MW.Profile.Equipment>>{}
     for(const entity of entities) {
         equipMap[entity.equipment_id] = {
             equipmentId: entity.equipment_id,
@@ -83,8 +83,8 @@ export const denormalizeMwEquipment = (entities:CallOfDuty.MW.Profile.Equipment.
     return equipMap
 }
 
-export const denormalizeWzModes = (entities:CallOfDuty.WZ.Profile.Mode.Entity[]):Record<MW.Mode.WZ, Model.WZ.Profile.Mode> => {
-    const modeMap = <Record<MW.Mode.WZ, Model.WZ.Profile.Mode>>{}
+export const denormalizeWzModes = (entities:CallOfDuty.WZ.Profile.Mode.Entity[]):Record<MW.Mode.WZ, Model.CallOfDuty.WZ.Profile.Mode> => {
+    const modeMap = <Record<MW.Mode.WZ, Model.CallOfDuty.WZ.Profile.Mode>>{}
     for(const entity of entities) {
         modeMap[entity.mode_id] = {
             modeId: entity.mode_id,

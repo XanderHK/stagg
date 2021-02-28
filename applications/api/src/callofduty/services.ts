@@ -1,4 +1,5 @@
 import API from '@callofduty/api'
+import * as DB from '@stagg/db'
 import * as Schema from '@callofduty/types'
 import * as Assets from '@callofduty/assets'
 import {
@@ -8,6 +9,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { getManager } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
 import { urlQueryToSql, FilterUrlQuery } from './filters'
 import { wzRank } from './rank'
 import { denormalizeWzMatch } from './model'
@@ -68,7 +70,12 @@ export class CallOfDutyAPI {
 @Injectable()
 export class CallOfDutyDB {
   constructor(
+    @InjectRepository(DB.CallOfDuty.WZ.Suspect.Entity, 'stagg')
+    public readonly susRepo: DB.CallOfDuty.WZ.Suspect.Repository
   ) {}
+  public async saveSus(sus:DB.CallOfDuty.WZ.Suspect.Entity) {
+    return this.susRepo.save(sus)
+  }
   public async wzMatchHistoryData(account_id:string, filters:FilterUrlQuery) {
     const manager = getManager()
     const filterQuery = urlQueryToSql(filters)

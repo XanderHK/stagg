@@ -4,7 +4,7 @@ import { Controller, Get } from '@nestjs/common'
 export class RootController {
     constructor() {}
     @Get('/health')
-    async HealthCheck():Promise<string> {
-        return 'ok'
+    async HealthCheck():Promise<{ rss:number, heapTotal:number, heapUsed:number }> {
+        return process.memoryUsage()
     }
 }

@@ -13,6 +13,7 @@ export class AddFriendViaMessage implements Feature {
         for(const { callofduty_uno_id } of handler.accounts) {
             await api.FriendAction(callofduty_uno_id, 'invite')
         }
+        await handler.reply(['Friend request(s) sent'])
     }
 }
 

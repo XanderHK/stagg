@@ -14,6 +14,7 @@ import { DbModule } from '../module.db'
       Account.Repository,
       CallOfDuty.MW.Match.Repository,
       CallOfDuty.WZ.Match.Repository,
+      CallOfDuty.WZ.Suspect.Repository,
       CallOfDuty.MW.Profile.Repository,
       CallOfDuty.MW.Profile.Mode.Repository,
       CallOfDuty.WZ.Profile.Mode.Repository,

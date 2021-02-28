@@ -13,8 +13,8 @@
  *      2-5-2. Save unoId for current account (if applicable)
  *      2-5-3. Fetch isolated match summary and save avgLifeTime for current account (if applicable)
  ***********************************************************************************************************/
-import axios from 'axios'
 import * as DB from '@stagg/db'
+import { FaaS, Model } from '@stagg/api'
 import * as CallOfDuty from '@callofduty/types'
 import CallOfDutyAPI from '@callofduty/api'
 import { ScraperService } from './service'
@@ -52,19 +52,18 @@ export class Worker {
             if (this.ShouldSpawnSibling()) {
                 await this.SpawnSiblingInstance()
                 this.hardStopReached = true
-                return
+                break
             }
             await this.RefreshMatchHistory()
         }
+        this.TriggerRankUpdate()
+    }
+    private async TriggerRankUpdate() {
+        console.log('[%] Triggering Discord Rank Role Update...')
+        return FaaS.ETL.Discord.Role(this.account.discord_id, { limit: <Model.CallOfDuty.Match.Filters.Measurement>{ uom: 'd', count: 7 } })
     }
     private async SpawnSiblingInstance() {
-        const siblingUrl = `${config.network.host.faas.etl.account}?redundancy=true`+
-            `&account_id=${this.account.account_id}`+
-            `&mw_end=${this.startTimes.mw}`+
-            `&wz_end=${this.startTimes.wz}`+
-            `&cw_end=${this.startTimes.cw}`
-        console.log(`[$] Spawning sibling instance ${siblingUrl}`)
-        axios.get(siblingUrl, { headers: { 'x-network-key': config.network.key } })
+        FaaS.ETL.Account(this.account.account_id, { redundancy: true }, { mw: this.startTimes.mw, cw: this.startTimes.cw, wz: this.startTimes.wz })
     }
     private ShouldSpawnSibling(): boolean {
         const [execTimeSec] = process.hrtime(this.hrtimeStart)
