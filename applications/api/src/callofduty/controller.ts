@@ -1,5 +1,6 @@
 import { Route } from '@stagg/api'
 import {
+    Put,
     Post,
     Body,
     Res,
@@ -49,6 +50,12 @@ export class CallOfDutyController {
         }
         res.send(responsePayload)
         return responsePayload
+    }
+    
+    @Put('/id/:unoId/wz/matches/:matchId/sus')
+    async FlagSuspectWZ(@Param() { unoId, matchId }, @Body() { uno, reasons }) {
+        await this.codDbService.saveSus({ uno_id: unoId, uno_username: uno, match_id: matchId, reasons, combined_id: `${unoId}.${matchId}` })
+        return { success: true }
     }
     
     @Get('/:platform/:identifier')

@@ -192,6 +192,20 @@ export namespace API {
                 Model.CallOfDuty.format.username.url.encoded(username)
             )
             export namespace Match {
+                export const Suspect = async (
+                    unoId:string,
+                    unoUsername:string,
+                    matchId:string,
+                    reasons:string[]
+                ):Res<Route.CallOfDuty.Account.WZ> => http.putNet(
+                    config.network.host.api +
+                    '/callofduty/id/' + unoId +
+                    '/wz/matches/' + matchId + '/sus',
+                    {
+                        reasons,
+                        uno: unoUsername,
+                    }
+                )
                 export const Summary = async (
                     username:string,
                     platform:Model.CallOfDuty.Platform='uno',

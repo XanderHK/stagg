@@ -45,6 +45,11 @@ export namespace CallOfDuty {
                 rank: any
                 results: any[]
             }
+            export namespace Matches {
+                export interface Sus {
+                    success: Boolean
+                }
+            }
         }
     }
     export namespace MW {

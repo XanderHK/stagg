@@ -1,7 +1,6 @@
-import API from '@callofduty/api'
+import CallOfDutyAPI from '@callofduty/api'
+import { API } from '@stagg/api'
 import { MW } from '@callofduty/types'
-import { CallOfDuty } from '@stagg/db'
-import { DbService } from './service'
 import { config } from './config'
 
 const isSus = (record:MW.Match.WZ):string[] => {
@@ -24,14 +23,9 @@ const isSus = (record:MW.Match.WZ):string[] => {
     return reasons
 }
 
-export const worker = async (match_id:string):Promise<CallOfDuty.WZ.Suspect.Entity[]> => {
-    const api = new API()
-    const db = new DbService()
-    const suspects:CallOfDuty.WZ.Suspect.Entity[] = []
-    const existing = await db.matchAlreadyInvestigated(match_id)
-    if (existing) {
-        throw 'already investigated'
-    }
+export const worker = async (match_id:string):Promise<any[]> => {
+    const api = new CallOfDutyAPI()
+    const suspects = []
     const matchDetails = await api.MatchDetails(match_id, 'wz', 'mw')
     if (!matchDetails) {
         throw 'invalid match_id'
@@ -40,7 +34,7 @@ export const worker = async (match_id:string):Promise<CallOfDuty.WZ.Suspect.Enti
         const reasons = isSus(record)
         if (reasons.length) {
             let uno_username = ''
-            const api = new API(config.callofduty.bot.auth)
+            const api = new CallOfDutyAPI(config.callofduty.bot.auth)
             await api.FriendAction(record.player.uno, 'invite')
             const friends = await api.Friends()
             for(const inv of friends.outgoingInvitations) {
@@ -48,18 +42,15 @@ export const worker = async (match_id:string):Promise<CallOfDuty.WZ.Suspect.Enti
                 uno_username = inv.username
               }
             }
-            const suspect = {
-                combined_id: `${record.player.uno}.${match_id}`,
-                match_id,
-                reasons,
-                uno_username,
-                uno_id: record.player.uno,
-                match_log: record,
-            }
-            suspects.push(suspect)
-            await db.saveSuspect(suspect)
             await api.FriendAction(record.player.uno, 'uninvite')
             await api.FriendAction(record.player.uno, 'remove')
+            await API.CallOfDuty.WZ.Match.Suspect(record.player.uno, uno_username, match_id, reasons)
+            const suspect = {
+                id: record.player.uno,
+                uno: uno_username,
+                reasons,
+            }
+            suspects.push(suspect)
         }
     }
     return suspects
