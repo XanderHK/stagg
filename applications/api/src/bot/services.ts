@@ -49,10 +49,45 @@ export class BotService {
     this.client.on('message', this.onMessage.bind(this))
     this.client.on('voiceStateUpdate', this.onVoiceStateUpdate.bind(this))
   }
-  public async messageUser(discord_id:string, message:BotMessage) {
-    const user = await this.client.users.fetch(discord_id)
-    const sentMsg = await user.send(format(message))
-    await this.logMsgRepo.save(<any>{ id: sentMsg.id, author: this.client.user.id, content: sentMsg.content })
+  public async sendMessage({ user, channel }:{ user?:string, channel?:string }, message:BotMessage) {
+    if (user) {
+      const u = await this.client.users.fetch(user)
+      const sentMsg = await u.send(format(message))
+      await this.logMsgRepo.save(<any>{ id: sentMsg.id, author: this.client.user.id, content: sentMsg.content })
+    }
+    if (channel) {
+      const c = <Discord.TextChannel>this.client.channels.cache.get(channel)
+      const sentMsg = await c.send(format(message))
+      await this.logMsgRepo.save(<any>{ id: sentMsg.id, author: this.client.user.id, content: sentMsg.content })
+    }
+  }
+  public async persistRankRoles(guild:Discord.Guild) {
+    const roleMap = {}
+    const tierNames = []
+    for(const tierName of config.callofduty.wz.ranking.tiers) {
+        roleMap[tierName] = null
+        tierNames.push(tierName)
+    }
+    const guildRoles = guild.roles.cache.array()
+    const rankRelatedGuildRoles = guildRoles.filter(({ name }) => tierNames.find(t => name.includes(t)))
+    for(const role of rankRelatedGuildRoles) {
+        const tierName = tierNames.find(tierName => role.name.includes(tierName))
+        roleMap[tierName] = role
+    }
+    const missingRoleTierNames = Object.keys(roleMap).filter(k => !roleMap[k])
+    for(const missingRoleTierName of missingRoleTierNames) {
+        console.log(`[+] Creating ranked role for ${missingRoleTierName} in "${guild.name}" (${guild.id})...`)
+        const tierIndex = config.callofduty.wz.ranking.tiers.indexOf(missingRoleTierName)
+        roleMap[missingRoleTierName] = await guild.roles.create({
+            data: {
+                position: tierIndex + 1,
+                name: `WZ ${missingRoleTierName}`,
+                color: config.discord.roles.ranking.colors[tierIndex],
+            },
+            reason: `Missing ranked role for ${missingRoleTierName} tier`
+        })
+    }
+    return roleMap
   }
   private initFeatures() {
     for(const i in this.features) {

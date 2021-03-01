@@ -87,7 +87,7 @@ const measurementQuery = (m:Measurement, c:MeasurementClause):Query => {
     }
 }
 
-export const reduceFilters = (q:FilterUrlQuery):FilterMap => {
+export const reduceFilters = (q:Partial<FilterUrlQuery>):FilterMap => {
     const mappedFilters = <FilterMap>{}
     for(const paramName in q) {
         const paramParser = Filters[paramName]
@@ -138,4 +138,4 @@ export const reduceSqlSuffix = (filters:FilterMap):string => {
     return query
 }
 
-export const urlQueryToSql = (q:FilterUrlQuery):string => reduceSqlSuffix(reduceFilters(q))
+export const urlQueryToSql = (q:Partial<FilterUrlQuery>):string => reduceSqlSuffix(reduceFilters(q))

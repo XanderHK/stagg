@@ -22,7 +22,7 @@ import { DbModule } from '../module.db'
       CallOfDuty.MW.Profile.Equipment.Repository,
     ], 'stagg'),
   ],
-  exports: [],
+  exports: [CallOfDutyDB],
   providers: [CallOfDutyDB, CallOfDutyAPI],
   controllers: [
     CallOfDutyController,

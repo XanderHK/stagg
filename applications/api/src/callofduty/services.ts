@@ -96,7 +96,7 @@ export class CallOfDutyDB {
     const rank = wzRank(results.length, rankStats.score, rankStats.kills, rankStats.deaths)
     return { rank, results: formattedResults }
   }
-  public async wzAggregateMatchData(account_id:string, filters:FilterUrlQuery) {
+  public async wzAggregateMatchData(account_id:string, filters:Partial<FilterUrlQuery>) {
     const filterQuery = urlQueryToSql(filters)
     const hasMatchLimit = filterQuery.toLowerCase().includes('limit')
     const hasMatchOffset = filterQuery.toLowerCase().includes('offset')
