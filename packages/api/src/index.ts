@@ -156,6 +156,15 @@ export namespace FaaS {
                         unoUsername.split(' ').join('_').split('#').join('_') + '.wz.history',
                         1000, 600
                     )
+                    export const Details = (
+                        unoUsername:string,
+                        matchId:string
+                    ) => Render.HTML.URL(
+                        '/' + Model.CallOfDuty.format.username.url.display(unoUsername) + '/matches/' + matchId,
+                        '',
+                        unoUsername.split(' ').join('_').split('#').join('_') + '.wz.match.' + matchId,
+                        1000, 400
+                    )
                 }
             }
         }
