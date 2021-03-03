@@ -2,6 +2,7 @@ import { MessageHandler } from '../handlers/message'
 import { VoiceStateHandler } from '../handlers/voice'
 
 export { BotHelp } from './help'
+export { MatchWZ, AliasMatchWZ } from './wz.match'
 export { BarracksWZ, AliasBarracksWZ } from './barracks.wz'
 export { CheckOnlineFriendsViaMessage } from './friends.message.online'
 export { AddFriendViaMessage } from './friends.message.add'

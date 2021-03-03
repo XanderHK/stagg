@@ -1,4 +1,4 @@
-import { Account, Discord } from '@stagg/db'
+import { Account, Discord, CallOfDuty } from '@stagg/db'
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { BotService } from './services'
@@ -13,6 +13,7 @@ import { DbModule } from '../module.db'
       Discord.Log.Message.Repository,
       Discord.Log.Response.Repository,
       Discord.Settings.Features.Repository,
+      CallOfDuty.WZ.Match.Repository,
     ], 'stagg'),
   ],
   exports: [BotService],
