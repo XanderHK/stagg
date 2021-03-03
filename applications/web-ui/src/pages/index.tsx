@@ -99,7 +99,7 @@ const FeaturesWrapper = styled.div`
 
 const AllTimeSummary = () => <><h1>All-Time Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} /></>
 const WeeklySummary = () => <><h1>Weekly Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} /></>
-const LastWeekSummary = () => <><h1>Last Week's Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} skip={'30d'} /></>
+const LastWeekSummary = () => <><h1>Last Week's Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} skip={'7d'} /></>
 const LastMatchDetails = () => <><h1>Details for Last Warzone Match</h1><Reports.MatchDetails.LazyLoader displayCommand="% wz last JSON#2168402" accountIdentifier={{ uno: 'JSON#2168402' }} matchId="5436448779828512667" /></>
 
 const FeatureCarousel = ({ index=0 }:{ index:number }) => {
