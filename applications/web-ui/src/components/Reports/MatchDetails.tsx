@@ -1,4 +1,5 @@
 import ordinal from 'ordinal'
+import dateFormat from 'dateformat'
 import { Model, Route } from '@stagg/api'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
@@ -81,12 +82,17 @@ const MatchDetailsWrapper = styled.div`
     th:nth-of-type(5), td:nth-of-type(5) { width: 120px; }
     th:nth-of-type(6), td:nth-of-type(6) { width: 120px; }
 
+    pre {
+        margin: 0;
+        padding: 8px 0;
+    }
+
     .ribbon-wrapper {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         height: 100%;
         > * {
-            position: absolute; top: -40px; left: -43px;
+            position: absolute; top: -43px; left: -43px;
             transform: scale(0.5);
         }
     }
@@ -94,9 +100,10 @@ const MatchDetailsWrapper = styled.div`
 export const View = (props:Props) => {
     const uno = props.account.callofduty.profiles.find(p => p.platform === 'uno')
     const unoUsername = Model.CallOfDuty.format.username.bot(uno.username)
-    const fullCommand = `% wz ${unoUsername} last`
+    const fullCommand = `% wz match ${props.matchId} ${unoUsername}`
     return (
         <MatchDetailsWrapper>
+            <pre>{dateFormat(new Date(props.results.endTime * 1000), 'mmmm d, yyyy — h:MMtt')}</pre>
             <CommandDisplay command={fullCommand} />
             <div className="ribbon-wrapper">
                 <div className="ribbon ribbon-top-left">
@@ -119,16 +126,23 @@ export const View = (props:Props) => {
                 </thead>
                 <tbody>
                 {
-                    props.team.map(({ rank, account, player, results }, i) => (
-                        <tr key={i}>
-                            <td><img className="rank" alt={`Rank ${rank.label}`} src={`/assets/images/ranks/${rank.id}.png`} /></td>
-                            <td>{ !account ? player.uno : account.callofduty.profiles.find(p => p.platform === 'uno').username }</td>
-                            <td>{ commaNum(results.score) }</td>
-                            <td>{ commaNum(results.damageDone) }</td>
-                            <td>{ results.kills }</td>
-                            <td>{ results.deaths }</td>
-                        </tr>
-                    ))
+                    props.team.map(({ rank, account, player, results }, i) => {
+                        const isMe = account?.callofduty?.unoId === props.account.callofduty.unoId
+                        const username = !account ? player.uno : account.callofduty.profiles.find(p => p.platform === 'uno').username
+                        return (
+                            <tr key={i} style={{
+                                fontWeight: isMe ? 600 : 500,
+                                background: !isMe ? '' : 'rgba(255, 255, 255, 0.2)',
+                            }}>
+                                <td><img className="rank" alt={`Rank ${rank.label}`} src={`/assets/images/ranks/${rank.id}.png`} /></td>
+                                <td>{ username }</td>
+                                <td>{ commaNum(results.score) }</td>
+                                <td>{ commaNum(results.damageDone) }</td>
+                                <td>{ results.kills }</td>
+                                <td>{ results.deaths }</td>
+                            </tr>
+                        )
+                    })
                 }
                 </tbody>
             </table>
