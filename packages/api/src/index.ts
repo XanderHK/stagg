@@ -163,7 +163,7 @@ export namespace FaaS {
                         '/' + Model.CallOfDuty.format.username.url.display(unoUsername) + '/matches/' + matchId,
                         '',
                         unoUsername.split(' ').join('_').split('#').join('_') + '.wz.match.' + matchId,
-                        1000, 400
+                        1000, 420
                     )
                 }
             }
