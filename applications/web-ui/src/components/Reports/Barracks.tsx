@@ -12,6 +12,7 @@ import {
 } from '.'
 
 export interface Props extends ReportAccountProps {
+    displayCommand?: string
     rank: {
         id: number
         label: string
@@ -51,20 +52,21 @@ const LoadingWrapper = styled.div`
     width: 680px;
     height: 480px;
 `
-export const LazyLoader = ({ accountIdentifier, limit='', skip='' }:ReportLazyLoadProps&{ limit?:string, skip?:string }) => {
-    const [reportProps, setReportProps] = useState<Props>(null)
+export const LazyLoader = (lazyProps:ReportLazyLoadProps&{ limit?:string, skip?:string }&Partial<Props>) => {
+    const [props, setProps] = useState<Props>(null)
     const loader = async () => {
+        const { accountIdentifier, limit='', skip='' } = lazyProps
         const props = await PropsLoader({ accountIdentifier }, limit, skip)
-        setReportProps(props)
+        setProps({ ...lazyProps, ...props })
     }
-    useEffect(() => { !reportProps ? loader() : null })
-    if (!reportProps) {
+    useEffect(() => { !props ? loader() : null })
+    if (!props) {
         return (
             <LoadingWrapper>Loading...</LoadingWrapper>
         )
     }
     return (
-        <View {...reportProps} />
+        <View {...props} />
     )
 }
 
@@ -283,7 +285,7 @@ export const View = (props:Props) => {
     const fullCommand = `% wz ${Model.CallOfDuty.format.username.bot(uno?.username)} ${cmdModifiers.join(' ')}`
     return (
         <BarracksWrapper>
-            <CommandDisplay command={fullCommand} />
+            <CommandDisplay command={props.displayCommand || fullCommand} />
             <div className="box small">
             <div className="content">
                 <h3 className="color-caption">

@@ -12,6 +12,7 @@ import {
 
 export interface Props extends Route.CallOfDuty.Account.WZ.Matches.Details {
     matchId: string
+    displayCommand?: string
 }
 
 export interface LazyLoadProps extends ReportLazyLoadProps {
@@ -37,11 +38,12 @@ const LoadingWrapper = styled.div`
     width: 680px;
     height: 480px;
 `
-export const LazyLoader = ({ accountIdentifier, matchId}:LazyLoadProps) => {
+export const LazyLoader = (lazyProps:LazyLoadProps&Partial<Props>) => {
     const [props, setProps] = useState<Props>(null)
     const loader = async () => {
+        const { matchId, accountIdentifier } = lazyProps
         const props = await PropsLoader({ accountIdentifier, matchId })
-        setProps(props)
+        setProps({ ...lazyProps, ...props })
     }
     useEffect(() => { !props ? loader() : null })
     if (!props) {
@@ -105,7 +107,7 @@ export const View = (props:Props) => {
     return (
         <MatchDetailsWrapper>
             <pre>{dateFormat(new Date(props.results.endTime * 1000), 'mmmm d, yyyy — h:MMtt')}</pre>
-            <CommandDisplay command={fullCommand} />
+            <CommandDisplay command={props.displayCommand || fullCommand} />
             <div className="ribbon-wrapper">
                 <div className="ribbon ribbon-top-left">
                     <span>

@@ -97,13 +97,13 @@ const FeaturesWrapper = styled.div`
   }
 `
 
-const AllTimeBarracks = () => <><h1>All-Time Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} /></>
-const WeeklyBarracks = () => <><h1>Weekly Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} /></>
-const MonthlyBarracks = () => <><h1>Monthly Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} /></>
-const LastMonthBarracks = () => <><h1>Last Month Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} skip={'30d'} /></>
+const AllTimeSummary = () => <><h1>All-Time Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} /></>
+const WeeklySummary = () => <><h1>Weekly Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} /></>
+const LastWeekSummary = () => <><h1>Last Week's Warzone Summary</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} skip={'30d'} /></>
+const LastMatchDetails = () => <><h1>Details for Last Warzone Match</h1><Reports.MatchDetails.LazyLoader displayCommand="% wz last JSON#2168402" accountIdentifier={{ uno: 'JSON#2168402' }} matchId="5436448779828512667" /></>
 
 const FeatureCarousel = ({ index=0 }:{ index:number }) => {
-  const ComponentArray = [<AllTimeBarracks />, <WeeklyBarracks />, <MonthlyBarracks />, <LastMonthBarracks />]
+  const ComponentArray = [<AllTimeSummary />, <LastMatchDetails />, <WeeklySummary />, <LastWeekSummary />]
   // need to catch < 0
   const safeIndex = index < 0 ? (ComponentArray.length + ((index % ComponentArray.length) || ComponentArray.length * -1))
     : index < ComponentArray.length ? index : index % (ComponentArray.length)
@@ -176,7 +176,6 @@ const Page = () => {
             <DemoWrapper>
               <CarouselArrowWrapper onClick={() => setCarouselIndex(carouselIndex-1)} style={{left: -36}}><i className="icon-arrow-left" /></CarouselArrowWrapper>
               <CarouselArrowWrapper onClick={() => setCarouselIndex(carouselIndex+1)} style={{right: -36}}><i className="icon-arrow-right" /></CarouselArrowWrapper>
-              <div className="helper-tip">Paste the command <a href="/discord/join">into Discord</a> and try it out</div>
               <FeatureCarousel index={carouselIndex} />
             </DemoWrapper>
           </div>
