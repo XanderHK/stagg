@@ -20,6 +20,7 @@ import { signJwt } from 'src/jwt'
 import { denormalizeAccount } from 'src/account/model'
 import { denormalizeWzMatch, denormalizeWzMatchRaw } from './model'
 import { config } from 'src/config'
+import { wzRank } from './rank'
 
 @Controller('/callofduty')
 export class CallOfDutyController {
@@ -107,7 +108,8 @@ export class CallOfDutyController {
         const matchDetails = await api.MatchDetails(matchId, 'wz', 'mw')
         for(const r of matchDetails.allPlayers as MW.Match.WZ[]) {
             if (r.player.team === matchRecord.team_id) {
-                const teamMemberRecord = { results: denormalizeWzMatchRaw(r) }
+                const results = denormalizeWzMatchRaw(r)
+                const teamMemberRecord = { rank: wzRank(1, results.score, results.kills, results.deaths), results }
                 const account = await this.acctService.findAny('id', r.player.uno)
                 if (account) {
                     teamMemberRecord['account'] = denormalizeAccount(account)
@@ -127,7 +129,12 @@ export class CallOfDutyController {
                 team.push(teamMemberRecord)
             }
         }
-        return { account: denormalizeAccount(account), results: denormalizeWzMatch(matchRecord), team }
+        return {
+            rank: wzRank(1, matchRecord.stat_score, matchRecord.stat_kills, matchRecord.stat_deaths),
+            account: denormalizeAccount(account),
+            results: denormalizeWzMatch(matchRecord),
+            team,
+        }
     }
     
 }
