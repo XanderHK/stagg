@@ -29,12 +29,11 @@ export class CallOfDutyAPI {
     const api = new API(tokens)
     const games:Schema.Game[] = []
     const profiles:Schema.PlatformId[] = []
-    const identityRes = await api.Identity()
-    if (!identityRes?.titleIdentities?.length) {
-      console.log('[!] Call of Duty API Empty Identity:', identityRes)
+    const { titleIdentities } = await api.Identity()
+    if (!titleIdentities?.length) {
       throw new BadGatewayException('identity empty')
     }
-    for(const { title, platform, username } of identityRes.titleIdentities) {
+    for(const { title, platform, username } of titleIdentities) {
       if (!games.includes(title)) {
         games.push(title)
       }
