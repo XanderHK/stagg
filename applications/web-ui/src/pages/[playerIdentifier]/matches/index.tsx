@@ -8,7 +8,8 @@
 import { NextPageContext } from 'next'
 import { api } from 'src/api-service'
 import { Template } from 'src/components/Template'
-import { MatchPreview } from 'src/components/Reports/Match/MatchPreview'
+import { MatchPreview } from 'src/components/Reports/MatchPreview'
+import { Model } from '@stagg/api'
 
 const Page = ({ renderReport, results }) => {
     return (
@@ -23,10 +24,8 @@ const Page = ({ renderReport, results }) => {
 }
 
 Page.getInitialProps = async ({ store, res, req, query }:NextPageContext) => {
-    const limit = query.limit as string
-    const skip = query.skip as string
     const unoUsername = query.playerIdentifier as string
-    const { data: { results } } = await api.CallOfDuty.WZ.Match.History(unoUsername, 'uno', { limit: { count: 10 } })
+    const { data: { results } } = await api.CallOfDuty.WZ.Match.History(unoUsername, 'uno', Model.CallOfDuty.format.filters.urlToObj(query as {[key:string]:string}))
     return { results }
 }
 

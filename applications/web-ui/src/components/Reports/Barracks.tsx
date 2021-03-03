@@ -6,11 +6,10 @@ import { api } from 'src/api-service'
 import {
     commaNum,
     commaToFixed,
-    CommandWrapper,
-    BarracksWrapper,
+    CommandDisplay,
     ReportLazyLoadProps,
     ReportAccountProps,
-} from '..'
+} from '.'
 
 export interface Props extends ReportAccountProps {
     rank: {
@@ -92,6 +91,186 @@ export const PropsLoader = async ({ accountIdentifier }:ReportLazyLoadProps, lim
     }
 }
 
+
+
+export const BarracksWrapper = styled.div`
+  position: relative;
+  margin: auto;
+  min-width: 800px;
+  max-width: 800px;
+  font-family: "Open Sans Condensed", Verdana, Arial, Helvetica, sans-serif;
+  .box {
+    position: relative;
+    background: rgba(0, 0, 0, 0.33);
+    text-align: center;
+    color: white;
+    padding: 0 15px 15px;
+    margin: 8px;
+  }
+
+  .box.small {
+    position: relative;
+    display: inline-block;
+    width: 216px;
+    height: 200px;
+    margin-bottom: 16px;
+  }
+
+  .box .content.inline {
+    display: inline-block;
+    width: 245px;
+  }
+
+  .box .content.hide-top h3,
+  .box .content.hide-top hr {
+    opacity: 0;
+  }
+
+  .box.small .content {
+    display: block;
+  }
+
+  /* .box.small .content::after {
+    content: '';
+    display: block;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    z-index: 0;
+    top: -180px;
+    background-position: center center;
+    background-repeat: no-repeat; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  .box.small:nth-of-type(2) .content.watch::after {
+    background-image: url('https://i.imgur.com/FWWCuTG.png')
+  }
+  .box.small:nth-of-type(3) .content.knives::after {
+    background-image: url('https://i.imgur.com/RD5Hf8r.png')
+  } */
+  /* killstreak: https://i.imgur.com/2WubQyT.png */
+  /* bullets: https://i.imgur.com/hD9oqq6.png */
+  /* crosshair: https://i.imgur.com/zup8Jkv.png */
+  /* knives: https://i.imgur.com/RD5Hf8r.png */
+  /* watch: https://i.imgur.com/FWWCuTG.png */
+  .box::before,
+  .box::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+  }
+
+  .box::before {
+    border-bottom: 15px solid rgba(0, 0, 0, 0.33);
+    border-right: 15px solid rgba(0, 0, 0, 0.33);
+  }
+
+  .box::after {
+    top: 100%;
+    bottom: auto;
+    border-left: 15px solid rgba(0, 0, 0, 0.33);
+    border-top: 15px solid rgba(0, 0, 0, 0.33);
+  }
+
+  .box hr {
+    max-width: 320px;
+    height: 1px;
+    margin: 16px auto;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(0, 0, 0, 0)), color-stop(0.5, #333333), to(rgba(0, 0, 0, 0)));
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), #333333, rgba(0, 0, 0, 0));
+    background: -moz-linear-gradient(left, rgba(0, 0, 0, 0), #333333, rgba(0, 0, 0, 0));
+    background: -o-linear-gradient(left, rgba(0, 0, 0, 0), #333333, rgba(0, 0, 0, 0));
+    background: linear-gradient(left, rgba(0, 0, 0, 0), #333333, rgba(0, 0, 0, 0));
+    border: 0;
+  }
+
+  .box hr::after {
+    display: block;
+    content: '';
+    height: 30px;
+    background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 116, color-stop(0%, #cccccc), color-stop(100%, rgba(255, 255, 255, 0)));
+    background-image: -webkit-radial-gradient(center top, farthest-side, #cccccc 0%, rgba(255, 255, 255, 0) 100%);
+    background-image: -moz-radial-gradient(center top, farthest-side, #cccccc 0%, rgba(255, 255, 255, 0) 100%);
+    background-image: -o-radial-gradient(center top, farthest-side, #cccccc 0%, rgba(255, 255, 255, 0) 100%);
+    background-image: radial-gradient(farthest-side at center top, #cccccc 0%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .box img.weapon {
+    display: block;
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  .box img.rank {
+    display: block;
+    width: 40%;
+    margin: 16px auto;
+  }
+
+  .box h1,
+  .box h2,
+  .box h3,
+  .box h4 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .box h3 {
+    font-size: 1.1rem;
+    color: rgb(93, 121, 130);
+  }
+
+  .box h2 {
+    font-size: 1.5rem;
+    color: rgb(82, 150, 255);
+  }
+
+  .box .stat {
+    display: block;
+    position: relative;
+    height: 2.5rem;
+  }
+
+  .box.small .stat+.stat {
+    margin-top: 14px;
+  }
+
+  .box .stat h2 {
+    position: absolute;
+    text-align: left;
+    top: 0;
+    right: 0;
+    width: 49%;
+    font-size: 1.5rem;
+    margin: -3px 0 0 0;
+  }
+
+  .box .stat label {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 49%;
+    color: #ccc;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .box .stat label small {
+    color: #888;
+    font-size: 0.65rem;
+    display: block;
+  }
+`
+
 export const View = (props:Props) => {
     const uno = props.account.profiles.find(p => p.platform === 'uno')
     const cmdModifiers:string[] = []
@@ -104,10 +283,7 @@ export const View = (props:Props) => {
     const fullCommand = `% wz ${Model.CallOfDuty.format.username.bot(uno?.username)} ${cmdModifiers.join(' ')}`
     return (
         <BarracksWrapper>
-            <CommandWrapper>
-                {fullCommand}
-                <i className="icon-content_copy report-hidden" title="Copy to clipboard" onClick={() => navigator?.clipboard?.writeText(fullCommand)} />
-            </CommandWrapper>
+            <CommandDisplay command={fullCommand} />
             <div className="box small">
             <div className="content">
                 <h3 className="color-caption">
@@ -117,7 +293,7 @@ export const View = (props:Props) => {
                 <h2 className="color-highlight">
                     { props.rank.label }
                 </h2>
-                <img className="rank" alt="Gold Rank"
+                <img className="rank" alt={`Rank ${props.rank.label}`}
                     src={`/assets/images/ranks/${props.rank.id}.png`} />
                 <div className="stat">
                     <h2>
@@ -245,28 +421,28 @@ export const View = (props:Props) => {
                 <hr />
                 <div className="stat">
                     <h2>
-                        {commaToFixed(props.results.damageDone / (props.results.games || 1), 1)}
+                        {commaToFixed(props.results.kills / (props.results.games || 1), 2)}
                     </h2>
                     <label>
-                        DAMAGE
+                        KILLS
                         <small>AVG PER GAME</small>
                     </label>
                 </div>
                 <div className="stat">
                     <h2>
-                        {commaNum(props.results.bestKillstreak)}
+                        {commaToFixed(props.results.score / (props.results.games || 1), 0)}
                     </h2>
                     <label>
-                        KILLSTREAK
-                        <small>HIGHEST EARNED</small>
+                        SCORE
+                        <small>AVG PER GAME</small>
                     </label>
                 </div>
                 <div className="stat">
                     <h2>
-                        {commaToFixed(props.results.kills / (props.results.games || 1), 2)}
+                        {commaToFixed(props.results.damageDone / (props.results.games || 1), 1)}
                     </h2>
                     <label>
-                        KILLS
+                        DAMAGE
                         <small>AVG PER GAME</small>
                     </label>
                 </div>
@@ -288,20 +464,20 @@ export const View = (props:Props) => {
                 </div>
                 <div className="stat">
                     <h2>
-                        {(props.results.damageDone / (props.results.damageTaken || 1)).toFixed(2)}
-                    </h2>
-                    <label>
-                        DD/DT RATIO
-                        <small>DMG DONE / TAKEN</small>
-                    </label>
-                </div>
-                <div className="stat">
-                    <h2>
                         {commaToFixed((props.results.score || 0) / (((props.results.timePlayed || 0) / 60) || 1))}
                     </h2>
                     <label>
                         SCORE / MIN
                         <small>AVERAGE OVERALL</small>
+                    </label>
+                </div>
+                <div className="stat">
+                    <h2>
+                        {(props.results.damageDone / (props.results.damageTaken || 1)).toFixed(2)}
+                    </h2>
+                    <label>
+                        DD/DT RATIO
+                        <small>DMG DONE / TAKEN</small>
                     </label>
                 </div>
             </div>
