@@ -133,7 +133,7 @@ export class CallOfDutyController {
             rank: wzRank(1, matchRecord.stat_score, matchRecord.stat_kills, matchRecord.stat_deaths),
             account: denormalizeAccount(account),
             results: denormalizeWzMatch(matchRecord),
-            team,
+            team: team.sort((a,b) => b.results.score - a.results.score),
         }
     }
     
