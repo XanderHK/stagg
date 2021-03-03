@@ -226,6 +226,16 @@ export namespace API {
                     Model.CallOfDuty.format.username.url.encoded(username) +
                     '/wz/matches' + '?' + Model.CallOfDuty.format.filters.objToUrl(filters)
                 )
+                export const Details = async (
+                    username:string,
+                    platform:Model.CallOfDuty.Platform='uno',
+                    matchId:string
+                ):Res<Route.CallOfDuty.Account.WZ.Matches.Details> => http.get(
+                    config.network.host.api +
+                    '/callofduty/' + platform + '/' +
+                    Model.CallOfDuty.format.username.url.encoded(username) +
+                    '/wz/matches/' + matchId
+                )
             }
         }
     }

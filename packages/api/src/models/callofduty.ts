@@ -1,41 +1,11 @@
 import * as CallOfDuty from '@callofduty/types'
 import { Model } from '..'
 
-interface GenericProfile {
-    updated: Date
-    level: number
-    prestige: number
-    levelXpGained: number
-    levelXpRemainder: number
-    currentWinStreak: number
-    lifetime: {
-        xp: number
-        wins: number
-        score: number
-        draws: number
-        games: number
-        kills: number
-        deaths: number
-        assists: number
-        suicides: number
-        headshots: number
-        timePlayed: number
-        shots: {
-            hit: number
-            miss: number
-        }
-    }
-    record: {
-        xp: number
-        spm: number
-        kdr: number
-        score: number
-        kills: number
-        deaths: number
-        assists: number
-        winStreak: number
-        killStreak: number
-    }
+export interface Rank {
+    id: number
+    tier: number
+    qualifier: number
+    label: string
 }
 
 export type Platform = CallOfDuty.Platform | 'discord' | 'account' | 'id'
@@ -69,7 +39,7 @@ export namespace format {
                 switch(key) {
                     case 'skip':
                     case 'limit':
-                        queries.push(`${key}=${f[key]['count']}${f[key]['uom']}`)
+                        queries.push(`${key}=${f[key]['count']}${f[key]['uom'] ? f[key]['uom'] : ''}`)
                         break
                     case 'modesIncluded':
                     case 'modesExcluded':
@@ -130,10 +100,48 @@ export namespace Match {
     }
     export namespace Filters {
         export enum UOM { Days = 'd', Weeks = 'w', Months = 'm', Years = 'y', Matches = '' }
-        export type Measurement = { uom?: UOM, count: number }
+        export type Measurement = { uom?: 'd'|'w'|'m'|'y'|'', count: number }
     }
 }
 
+
+
+interface GenericProfile {
+    updated: Date
+    level: number
+    prestige: number
+    levelXpGained: number
+    levelXpRemainder: number
+    currentWinStreak: number
+    lifetime: {
+        xp: number
+        wins: number
+        score: number
+        draws: number
+        games: number
+        kills: number
+        deaths: number
+        assists: number
+        suicides: number
+        headshots: number
+        timePlayed: number
+        shots: {
+            hit: number
+            miss: number
+        }
+    }
+    record: {
+        xp: number
+        spm: number
+        kdr: number
+        score: number
+        kills: number
+        deaths: number
+        assists: number
+        winStreak: number
+        killStreak: number
+    }
+}
 export namespace MW {
     export interface Profile extends GenericProfile {
         modes: Record<string, MW.Profile.Mode>
@@ -189,6 +197,95 @@ export namespace WZ {
             contracts: number
             revives: number
             cash: number
+        }
+    }
+    export interface Match {
+        matchId: string
+        mapId: CallOfDuty.MW.Map.WZ
+        modeId: CallOfDuty.MW.Mode.WZ
+        startTime: number
+        endTime: number
+        teamId: string
+        score: number
+        downs: number[]
+        kills: number
+        deaths: number
+        damageDone: number
+        damageTaken: number
+        teamWipes: number
+        executions: number
+        headshots: number
+        revives: number
+        contracts: number
+        lootCrates: number
+        buyStations: number
+        timePlayed: number
+        avgLifeSpan: number
+        teamPlacement: number
+        teamSurvivalTime: number
+        bestKillstreak: number
+        distanceTraveled: number
+        percentTimeMoving: number
+        gulagKills: number
+        gulagDeaths: number
+        clusterKills: number
+        airstrikeKills: number
+        trophyDefense: number
+        munitionShares: number
+        missileRedirects: number
+        equipmentDestroyed: number
+        xp: {
+            match: number
+            score: number
+            bonus: number
+            medal: number
+            misc: number
+            challenge: number
+            total: number
+        }
+    }
+    export namespace Match {
+        export interface Aggregate {
+            games: number
+            wins: number
+            winsGulag: number
+            gamesGulag: number
+            gamesTop10: number
+            finalCircles: number
+            score: number
+            kills: number
+            deaths: number
+            lifespan: number
+            damageDone: number
+            damageTaken: number
+            teamWipes: number
+            killstreak: number
+            executions: number
+            headshots: number
+            revives: number
+            contracts: number
+            lootCrates: number
+            buyStations: number
+            gulagKills: number
+            gulagDeaths: number
+            clusterKills: number
+            airstrikeKills: number
+            trophyDefense: number
+            munitionShares: number
+            missileRedirects: number
+            equipmentDestroyed: number
+            timePlayed: number
+            teamPlacement: number
+            distanceTraveled: number
+            teamSurvivalTime: number
+            percentTimeMoving: number
+            mostKills: number
+            mostDeaths: number
+            mostRevives: number
+            mostHeadshots: number
+            mostDamageDone: number
+            mostDamageTaken: number
+            bestKillstreak: number
         }
     }
 }
