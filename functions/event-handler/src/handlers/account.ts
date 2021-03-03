@@ -30,6 +30,9 @@ export class Ready implements EventHandler {
             '```',
             `% wz ${botUsername} 7d`,
             '```',
+            '```',
+            `% wz last ${botUsername}`,
+            '```',
         ])
     }
 }
