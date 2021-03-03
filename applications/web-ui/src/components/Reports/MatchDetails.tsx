@@ -84,6 +84,7 @@ const MatchDetailsWrapper = styled.div`
 
     pre {
         margin: 0;
+        color: #ccc;
         padding: 8px 0;
     }
 
