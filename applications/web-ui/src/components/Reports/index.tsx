@@ -36,7 +36,7 @@ const CommandWrapper = styled.pre`
   top: -4em;
   right: 1.2em;
   background: #333;
-  padding: 6px 18px;
+  padding: 6px 18px !important;
   border-radius: 4px;
   color: #eee;
 
@@ -45,7 +45,7 @@ const CommandWrapper = styled.pre`
     position: relative;
     right: -9px;
     cursor: pointer;
-    padding-left: 8px;
+    padding: 0 0 0 9px;
     border-left: 1px solid white;
     :hover {
       color: #5658dd;
