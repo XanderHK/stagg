@@ -195,7 +195,7 @@ const recursiveRefHydration = async (obj:object) => {
         if (typeof obj[key] === typeof 'str' && obj[key].match(/\$\{[^\}]+\}/)) {
             const varKey = obj[key].replace(/\$\{([^\}]+)\}/, '$1')
             const varVal = await getEnvSecret(varKey)
-            obj[key] = obj[key].replace('${'+varKey+'}', varVal)
+            obj[key] = typeof varVal !== typeof {} ? obj[key].replace('${'+varKey+'}', varVal) : varVal
         }
     }
 }

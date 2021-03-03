@@ -97,10 +97,10 @@ const FeaturesWrapper = styled.div`
   }
 `
 
-const AllTimeBarracks = () => <><h1>All-Time Warzone Barracks</h1><Reports.Barracks.WZ.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} /></>
-const WeeklyBarracks = () => <><h1>Weekly Warzone Barracks</h1><Reports.Barracks.WZ.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} /></>
-const MonthlyBarracks = () => <><h1>Monthly Warzone Barracks</h1><Reports.Barracks.WZ.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} /></>
-const LastMonthBarracks = () => <><h1>Last Month Warzone Barracks</h1><Reports.Barracks.WZ.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} skip={'30d'} /></>
+const AllTimeBarracks = () => <><h1>All-Time Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} /></>
+const WeeklyBarracks = () => <><h1>Weekly Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'7d'} /></>
+const MonthlyBarracks = () => <><h1>Monthly Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} /></>
+const LastMonthBarracks = () => <><h1>Last Month Warzone Barracks</h1><Reports.Barracks.LazyLoader accountIdentifier={{ uno: 'MellowD#6992980' }} limit={'30d'} skip={'30d'} /></>
 
 const FeatureCarousel = ({ index=0 }:{ index:number }) => {
   const ComponentArray = [<AllTimeBarracks />, <WeeklyBarracks />, <MonthlyBarracks />, <LastMonthBarracks />]

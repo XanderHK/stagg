@@ -30,7 +30,7 @@ export class CallOfDutyAPI {
     const games:Schema.Game[] = []
     const profiles:Schema.PlatformId[] = []
     const { titleIdentities } = await api.Identity()
-    if (!titleIdentities.length) {
+    if (!titleIdentities?.length) {
       throw new BadGatewayException('identity empty')
     }
     for(const { title, platform, username } of titleIdentities) {
@@ -71,10 +71,15 @@ export class CallOfDutyAPI {
 export class CallOfDutyDB {
   constructor(
     @InjectRepository(DB.CallOfDuty.WZ.Suspect.Entity, 'stagg')
-    public readonly susRepo: DB.CallOfDuty.WZ.Suspect.Repository
+    public readonly susRepo: DB.CallOfDuty.WZ.Suspect.Repository,
+    @InjectRepository(DB.CallOfDuty.WZ.Match.Entity, 'stagg')
+    public readonly matchRepo: DB.CallOfDuty.WZ.Match.Repository
   ) {}
   public async saveSus(sus:DB.CallOfDuty.WZ.Suspect.Entity) {
     return this.susRepo.save(sus)
+  }
+  public async getMatchRecord(account_id:string, match_id:string) {
+    return this.matchRepo.findOne({ account_id, match_id })
   }
   public async wzMatchHistoryData(account_id:string, filters:FilterUrlQuery) {
     const manager = getManager()

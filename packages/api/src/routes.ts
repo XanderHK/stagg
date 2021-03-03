@@ -37,17 +37,27 @@ export namespace CallOfDuty {
     }
     export namespace Account {
         export interface WZ extends Account {
-            rank: any
-            results: any
+            rank: Model.CallOfDuty.Rank
+            results: Model.CallOfDuty.WZ.Match.Aggregate
         }
         export namespace WZ {
             export interface Matches extends Account {
-                rank: any
-                results: any[]
+                rank: Model.CallOfDuty.Rank
+                results: Model.CallOfDuty.WZ.Match[]
             }
             export namespace Matches {
                 export interface Sus {
                     success: Boolean
+                }
+                export interface Details extends Account {
+                    rank: Model.CallOfDuty.Rank
+                    results: Model.CallOfDuty.WZ.Match
+                    team: {
+                        account?: Model.Account
+                        rank: Model.CallOfDuty.Rank
+                        player?: { id: string, uno: string }
+                        results: Model.CallOfDuty.WZ.Match
+                    }[]
                 }
             }
         }

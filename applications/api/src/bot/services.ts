@@ -8,6 +8,8 @@ import { MessageHandler, format, BotMessage } from './handlers/message'
 import {
     Feature,
     BotHelp,
+    MatchWZ,
+    AliasMatchWZ,
     BarracksWZ,
     AliasBarracksWZ,
     AddFriendViaMessage,
@@ -22,6 +24,8 @@ export class BotService {
   public readonly client:Discord.Client
   public readonly features = <Feature[]>[
     BotHelp,
+    MatchWZ,
+    AliasMatchWZ,
     BarracksWZ,
     AliasBarracksWZ,
     AddFriendViaMessage,
@@ -32,6 +36,8 @@ export class BotService {
   ]
   @InjectRepository(DB.Account.Entity, 'stagg')
   public readonly acctRepo: DB.Account.Repository
+  @InjectRepository(DB.CallOfDuty.WZ.Match.Entity, 'stagg')
+  public readonly wzRepo: DB.CallOfDuty.WZ.Match.Repository
   @InjectRepository(DB.Discord.Log.Message.Entity, 'stagg')
   public readonly logMsgRepo: DB.Discord.Log.Message.Repository
   @InjectRepository(DB.Discord.Log.Response.Entity, 'stagg')
