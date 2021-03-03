@@ -1,6 +1,6 @@
 {
   "name": "stagg-faas-etl-account",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "private": true,
@@ -14,7 +14,7 @@
   "dependencies": {
     "@callofduty/api": "^1.2.5",
     "@callofduty/types": "^1.2.5",
-    "@stagg/api": "^1.3.4",
+    "@stagg/api": "^1.3.5",
     "@stagg/db": "^1.3.3",
     "@stagg/events": "^1.3.3",
     "@stagg/gcp": "^1.3.3",
