@@ -83,7 +83,7 @@ export class CallOfDutyDB {
   }
   public async wzMatchHistoryData(account_id:string, filters:FilterUrlQuery) {
     const manager = getManager()
-    const filterQuery = urlQueryToSql(filters)
+    const filterQuery = urlQueryToSql(filters, 'start_time', 'DESC')
     const queryAddition = !filterQuery || filterQuery.match(/^ +?limit/i) ? filterQuery : ` AND ${filterQuery}`
     const whereClause = `account_id=$1 ${queryAddition}`
     const query = ` SELECT  * FROM "callofduty/wz/matches" WHERE ${whereClause}`

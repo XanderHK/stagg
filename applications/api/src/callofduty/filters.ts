@@ -105,7 +105,7 @@ export const reduceFilters = (q:FilterUrlQuery):FilterMap => {
     }
     return mappedFilters
 }
-export const reduceSqlSuffix = (filters:FilterMap, orderBy:keyof DB.CallOfDuty.WZ.Match.Entity='start_time', order:'ASC'|'DESC'='DESC'):string => {
+export const reduceSqlSuffix = (filters:FilterMap, orderBy?:keyof DB.CallOfDuty.WZ.Match.Entity, order?:'ASC'|'DESC'):string => {
     const compiledQueries = <Query[]>[]
     for(const paramName in filters) {
         const queryParser = FilterQuery[paramName]
@@ -132,7 +132,10 @@ export const reduceSqlSuffix = (filters:FilterMap, orderBy:keyof DB.CallOfDuty.W
             default: wheres.push(condition)
         }
     }
-    let query = wheres.join(' AND ') + ` ORDER BY ${orderBy} ${order} `
+    let query = wheres.join(' AND ')
+    if (orderBy && order) {
+        query += ` ORDER BY ${orderBy} ${order} `
+    }
     if (skips.length)  query += ` OFFSET ${skips.join(',')}`
     if (limits.length) query += ` LIMIT  ${limits.join(',')}`
     return query
