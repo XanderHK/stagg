@@ -29,8 +29,7 @@ export class Ready implements EventHandler {
             `${config.network.host.web}/${urlUsername}`,
             '```',
             `% wz ${botUsername} 7d`,
-            '```',
-            '```',
+            '``````',
             `% wz last ${botUsername}`,
             '```',
         ])
