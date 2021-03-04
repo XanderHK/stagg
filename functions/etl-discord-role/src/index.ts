@@ -8,6 +8,7 @@ export default async (req, res) => {
     setNetworkConfig(config.network)
     try { await validateNetworkAuth(req,res) } catch(e) { return }
     const { discord_id, limit, skip } = req.query as {[key:string]:string}
+    console.log('[>] Running Discord rank role update:', discord_id, limit, skip)
     await runJob(discord_id, limit, skip)
     res.status(200)
     res.send({ success: true })

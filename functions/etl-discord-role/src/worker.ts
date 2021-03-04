@@ -16,7 +16,9 @@ export const runJob = async (discord_id:string, limit:string='7d', skip:string='
         console.log('[!] Returning empty, no discord id')
         return
     }
+    console.log('[.] Connecting to Discord...')
     await connectDiscord()
+    console.log('[.] Connected to Discord...')
     for(const guild of client.guilds.cache.array()) {
         const member = await getGuildMember(guild, discord_id)
         if (!member) {
